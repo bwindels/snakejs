@@ -97,5 +97,31 @@ module.exports = {
 			{x: 1, y: 4}
 		]);
 		test.done();
+	},
+
+	'test containsPoint with segment on y-axis': function(test) {
+		var a = new Point(1,1);
+		var b = new Point(1,6);
+		var c = new Point(1,3);
+		var d = new Point(3,3);
+		var s = new Segment(a,b);
+		test.strictEqual(s.containsPoint(a), false);
+		test.strictEqual(s.containsPoint(b), true);
+		test.strictEqual(s.containsPoint(c), true);
+		test.strictEqual(s.containsPoint(d), false);
+		test.done();
+	},
+
+	'test containsPoint with segment on x-axis': function(test) {
+		var a = new Point(1, 1);
+		var b = new Point(6, 1);
+		var c = new Point(3, 1);
+		var d = new Point(3, 3);
+		var s = new Segment(a,b);
+		test.strictEqual(s.containsPoint(a), false);
+		test.strictEqual(s.containsPoint(b), true);
+		test.strictEqual(s.containsPoint(c), true);
+		test.strictEqual(s.containsPoint(d), false);
+		test.done();
 	}
 }

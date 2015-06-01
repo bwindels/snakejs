@@ -89,6 +89,14 @@ Snake.prototype = {
 		this.growAmount += amount;
 	},
 
+	headCollidesWithBody: function() {
+		var head = this._head().head;
+		var allSegmentsButHead = this.segments.slice(0, this.segments.length - 2);
+		return allSegmentsButHead.some(function(segment) {
+			return segment.containsPoint(head);
+		});
+	},
+
 	_head: function() {
 		return this.segments[this.segments.length - 1];
 	},

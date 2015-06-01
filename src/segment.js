@@ -53,6 +53,24 @@ function Segment(head, tail) {
 		}
 	}
 
+	this.containsPoint = function(point) {
+		var min, max, value;
+		if(this.head.x === this.tail.x && this.head.x === point.x) {
+			min = Math.min(this.head.y, this.tail.y);
+			max = Math.max(this.head.y, this.tail.y);
+			value = point.y;
+		}
+		else if(this.head.y === this.tail.y && this.head.y === point.y) {
+			min = Math.min(this.head.x, this.tail.x);
+			max = Math.max(this.head.x, this.tail.x);
+			value = point.x;
+		}
+		else {
+			return false;
+		}
+		return value > min && value <= max;
+	}
+
 }
 
 module.exports = Segment;

@@ -124,5 +124,26 @@ module.exports = {
 		test.done();
 	},
 
+	'test headCollidesWithBody': function(test) {
+		var mock = createDrawMock();
+		var snake = new Snake(new Point(0,4), new Point(0,0), mock);
+		/*
+		   xxx
+		   x x
+		   xtx
+		     h
+		*/
+		snake.grow(6);
+		snake.turnLeft();
+		snake.moveForward();
+		snake.turnLeft();
+		snake.moveForward();
+		snake.turnLeft();
+		test.strictEqual(snake.headCollidesWithBody(), false);
+		snake.moveForward();
+		test.strictEqual(snake.headCollidesWithBody(), true);
+		test.done();
+	}
+
 	
 }
