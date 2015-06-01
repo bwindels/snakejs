@@ -16,6 +16,7 @@ var screen = new Screen(tty);
 var game = new SnakeGame(screen);
 
 tty.on('exitPressed', function() {
+	tty.cleanup();
 	process.stdout.write('\n');
 	process.exit();
 });

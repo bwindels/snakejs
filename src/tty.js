@@ -33,6 +33,8 @@ TTYDevice.prototype.initializeKeyboard = function() {
 	this.inputStream.resume();
 	this.inputStream.setEncoding('utf-8');
 	this.inputStream.setRawMode(true);
+	//hide cursor
+	this.outputStream.write('\033[?25l');
 	var self = this;
 	this.inputStream.on('data', function(chr) {
 		if(chr === '\u001b[A') {
@@ -51,6 +53,11 @@ TTYDevice.prototype.initializeKeyboard = function() {
 			self.emit('exitPressed');
 		}
 	});
+};
+
+TTYDevice.prototype.cleanup = function() {
+	this.clearScreen();
+	this.outputStream.write('\033[?25h');
 };
 
 module.exports = TTYDevice;
