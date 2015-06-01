@@ -18,7 +18,7 @@ Field.prototype = {
 			callback(new Point(this.width - 1, i));
 		}
 	},
-	isPointWall: function(point) {
+	pointIsWall: function(point) {
 		return point.x === 0 || point.y === 0 || point.x === this.width - 1 || point.y === this.height - 1;
 	},
 	initialSnakeSegment: function() {
@@ -36,3 +36,5 @@ Field.prototype = {
 	}
 	
 }
+
+module.exports = Field;
