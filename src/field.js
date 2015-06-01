@@ -26,7 +26,7 @@ Field.prototype = {
 		var x = Math.floor((this.width / 2) - (len / 2));
 		var y = Math.floor(this.height / 2);
 		var head = new Point(x,y);
-		var tail = head.translate(new Point(0, len));
+		var tail = head.translate(new Point(len, 0));
 		return new Segment(head,tail);
 	},
 	randomPoint: function() {
