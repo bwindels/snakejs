@@ -5,19 +5,24 @@ var Snake = require('../src/snake.js');
 function createDrawMock() {
 	var drawOps = [];
 
-	function drawFunction(fill, point) {
-		drawOps.push([fill, {x: point.x, y: point.y}]);
+	function clearFunction(point) {
+		drawOps.push([false, {x: point.x, y: point.y}]);
 	}
-
-	drawFunction.drawOps = drawOps;
-
-	return drawFunction;
+	function fillFunction(point) {
+		drawOps.push([true, {x: point.x, y: point.y}]);
+	}
+	
+	return {
+		clearFunction: clearFunction,
+		fillFunction: fillFunction,
+		drawOps: drawOps
+	};
 }
 
 module.exports = {
 	'test turnLeft with snake looking upwards': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(0,4), new Point(0,0), mock);
+		var snake = new Snake(new Point(0,4), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		test.strictEqual(snake.length(), 4);
 		snake.turnLeft();
 		test.strictEqual(snake.length(), 4);
@@ -30,7 +35,7 @@ module.exports = {
 
 	'test turnLeft with snake looking left': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(-4,0), new Point(0,0), mock);
+		var snake = new Snake(new Point(-4,0), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		test.strictEqual(snake.length(), 4);
 		snake.turnLeft();
 		test.strictEqual(snake.length(), 4);
@@ -43,7 +48,7 @@ module.exports = {
 
 	'test turnRight looking downwards': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(0,-4), new Point(0,0), mock);
+		var snake = new Snake(new Point(0,-4), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		test.strictEqual(snake.length(), 4);
 		snake.turnRight();
 		test.strictEqual(snake.length(), 4);
@@ -56,7 +61,7 @@ module.exports = {
 
 	'test turnRight looking right': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(4,0), new Point(0,0), mock);
+		var snake = new Snake(new Point(4,0), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		test.strictEqual(snake.length(), 4);
 		snake.turnRight();
 		test.strictEqual(snake.length(), 4);
@@ -69,7 +74,7 @@ module.exports = {
 
 	'test moveForward': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(0,4), new Point(0,0), mock);
+		var snake = new Snake(new Point(0,4), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		test.strictEqual(snake.length(), 4);
 		snake.moveForward();
 		test.strictEqual(snake.length(), 4);
@@ -82,7 +87,7 @@ module.exports = {
 
 	'test drawInitial and length after complex movement': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(0,4), new Point(0,0), mock);
+		var snake = new Snake(new Point(0,4), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		//let the snake grow by 3 cells over the coming moves
 		snake.grow(3);
 		/*
@@ -126,7 +131,7 @@ module.exports = {
 
 	'test headCollidesWithBody': function(test) {
 		var mock = createDrawMock();
-		var snake = new Snake(new Point(0,4), new Point(0,0), mock);
+		var snake = new Snake(new Point(0,4), new Point(0,0), mock.clearFunction, mock.fillFunction);
 		/*
 		   xxx
 		   x x

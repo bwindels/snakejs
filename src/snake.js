@@ -6,9 +6,10 @@ var leftAxis = new Point(1, 0);
 var downAxis = new Point(0, -1);
 var rightAxis = new Point(-1, 0);
 
-function Snake(head, tail, drawFunction) {
+function Snake(head, tail, clearFunction, fillFunction) {
 	this.segments = [new Segment(head, tail)];
-	this.drawFunction = drawFunction;
+	this.clearFunction = clearFunction;
+	this.fillFunction = fillFunction;
 	this.growAmount = 0;
 }
 
@@ -63,19 +64,19 @@ Snake.prototype = {
 		this._shrinkTail();
 		
 		this.segments.push(head);
-		head.iteratePoints(this.drawFunction.bind(this, true));
+		head.iteratePoints(this.fillFunction);
 	},
 
 	moveForward: function(n) {
 		var p = this._headSegment().grow();
 		this._shrinkTail();
-		this.drawFunction(true, p);
+		this.fillFunction(p);
 	},
 
 	drawInitial: function() {
-		var callback = this.drawFunction.bind(this, true);
+		var fillFunction = this.fillFunction;
 		this.segments.forEach(function(segment) {
-			segment.iteratePoints(callback);
+			segment.iteratePoints(fillFunction);
 		});
 	},
 
@@ -97,10 +98,16 @@ Snake.prototype = {
 		});
 	},
 
+	containsPoint: function(point) {
+		return this.segments.some(function(segment) {
+			return segment.containsPoint(point);
+		});
+	},
+
 	head: function() {
 		return this._headSegment().head;
 	},
-	
+
 	_headSegment: function() {
 		return this.segments[this.segments.length - 1];
 	},
@@ -114,7 +121,7 @@ Snake.prototype = {
 		var tailSegment = this.segments[0];
 		
 		var p = tailSegment.shrink();
-		this.drawFunction(false, p);
+		this.clearFunction(p);
 
 		if(tailSegment.length() === 0) {
 			this.segments.splice(0, 1);
