@@ -1,9 +1,13 @@
+var Field = require('./field');
+var Snake = require('./snake');
+
 function SnakeGame(screen) {
 	this.screen = screen;
 	var fieldSize = this.screen.fieldSize();
 	this.field = new Field(fieldSize.width, fieldSize.height);
 	this.nextMove = 0;	//0 is forward, -1 is left, 1 is right
 	this.score = 0;
+	this.timeoutHandle = null;
 }
 
 SnakeGame.prototype = {
@@ -40,8 +44,9 @@ SnakeGame.prototype = {
 		else if(this.nextMove === 1) {
 			this.snake.turnRight();
 		}
+		this.nextMove = 0;
 		this._checkPosition();
-		setTimeout(this._nextTick.bind(this), 1000);
+		this.timeoutHandle = setTimeout(this._nextTick.bind(this), 1000);
 	},
 	_newApple: function() {
 		var apple;
@@ -71,6 +76,12 @@ SnakeGame.prototype = {
 		this.screen.drawScore(this.score);
 	},
 	_gameOver: function() {
-		screen.drawGameOver(this.score);
+		this.screen.drawGameOver(this.score);
+		if(this.timeoutHandle) {
+			clearTimeout(this.timeoutHandle);
+			this.timeoutHandle = null;
+		}
 	}
 };
+
+module.exports = SnakeGame;
