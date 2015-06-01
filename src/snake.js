@@ -14,7 +14,7 @@ function Snake(head, tail, drawFunction) {
 
 Snake.prototype = {
 	turnLeft: function() {
-		var currentAxis = this._head().axis();
+		var currentAxis = this._headSegment().axis();
 		var newAxis;
 		if(currentAxis.equals(leftAxis)) {
 			newAxis = upAxis;
@@ -35,7 +35,7 @@ Snake.prototype = {
 	},
 
 	turnRight: function() {
-		var currentAxis = this._head().axis();
+		var currentAxis = this._headSegment().axis();
 		var newAxis;
 		if(currentAxis.equals(leftAxis)) {
 			newAxis = downAxis;
@@ -56,7 +56,7 @@ Snake.prototype = {
 	},
 
 	_turn: function(newAxis) {
-		var tailPoint = this._head().head;
+		var tailPoint = this.head();
 		var headPoint = tailPoint.translate(newAxis);
 		var head = new Segment(headPoint, tailPoint);
 		
@@ -67,7 +67,7 @@ Snake.prototype = {
 	},
 
 	moveForward: function(n) {
-		var p = this._head().grow();
+		var p = this._headSegment().grow();
 		this._shrinkTail();
 		this.drawFunction(true, p);
 	},
@@ -90,16 +90,21 @@ Snake.prototype = {
 	},
 
 	headCollidesWithBody: function() {
-		var head = this._head().head;
+		var head = this.head();
 		var allSegmentsButHead = this.segments.slice(0, this.segments.length - 2);
 		return allSegmentsButHead.some(function(segment) {
 			return segment.containsPoint(head);
 		});
 	},
 
-	_head: function() {
+	head: function() {
+		return this._headSegment().head;
+	},
+	
+	_headSegment: function() {
 		return this.segments[this.segments.length - 1];
 	},
+
 
 	_shrinkTail: function() {
 		if(this.growAmount > 0) {
