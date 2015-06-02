@@ -12,6 +12,14 @@ function SnakeGame(screen) {
 
 SnakeGame.prototype = {
 	start: function() {
+
+		if(this.timeoutHandle) {
+			clearTimeout(this.timeoutHandle);
+			this.timeoutHandle = null;
+		}
+
+		this.score = 0;
+		this.nextMove = 0;
 		var snakeSegment = this.field.initialSnakeSegment();
 		this.snake = new Snake(
 			snakeSegment.head,
@@ -20,6 +28,7 @@ SnakeGame.prototype = {
 			this.screen.fillSnakeCell.bind(this.screen)
 		);
 		this.apple = this._newApple();
+		this.screen.clear();
 		this._drawInitial();
 		this._nextTick();
 	},
@@ -33,8 +42,11 @@ SnakeGame.prototype = {
 		this.field.draw(this.screen.fillWallCell.bind(this.screen));
 		this.snake.drawInitial();
 		this.screen.fillAppleCell(this.apple);
+		this.screen.drawScore(this.score);
 	},
 	_nextTick: function() {
+		this.counter = this.counter ? this.counter + 1 : 1;
+		this.screen.drawStatus(this.counter);
 		if(this.nextMove === -1) {
 			this.snake.turnLeft();
 		}
@@ -44,9 +56,13 @@ SnakeGame.prototype = {
 		else if(this.nextMove === 1) {
 			this.snake.turnRight();
 		}
+		else {
+			this.screen.drawStatus('wtf ' + this.counter);
+		}
+		if(this._checkPosition()) {
+			this.timeoutHandle = setTimeout(this._nextTick.bind(this), 100);
+		}
 		this.nextMove = 0;
-		this._checkPosition();
-		this.timeoutHandle = setTimeout(this._nextTick.bind(this), 100);
 	},
 	_newApple: function() {
 		var apple;
@@ -59,14 +75,17 @@ SnakeGame.prototype = {
 	},
 	_checkPosition: function() {
 		if(this.snake.headCollidesWithBody()) {
-			return this._gameOver();
+			this._gameOver();
+			return false;
 		}
 		if(this.field.pointIsWall(this.snake.head())) {
-			return this._gameOver();
+			this._gameOver();
+			return false;
 		}
 		if(this.snake.containsPoint(this.apple)) {
 			this._takeApple();
 		}
+		return true;
 	},
 	_takeApple: function() {
 		this.snake.grow(5);
@@ -76,11 +95,8 @@ SnakeGame.prototype = {
 		this.screen.drawScore(this.score);
 	},
 	_gameOver: function() {
+		this.snake.drawInitial(this.screen.fillDeadSnakeCell.bind(this.screen));
 		this.screen.drawGameOver(this.score);
-		if(this.timeoutHandle) {
-			clearTimeout(this.timeoutHandle);
-			this.timeoutHandle = null;
-		}
 	}
 };
 

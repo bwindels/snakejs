@@ -73,10 +73,12 @@ Snake.prototype = {
 		this.fillFunction(p);
 	},
 
-	drawInitial: function() {
-		var fillFunction = this.fillFunction;
+	drawInitial: function(drawFunction) {
+		if(!drawFunction) {
+			drawFunction = this.fillFunction;
+		}
 		this.segments.forEach(function(segment) {
-			segment.iteratePoints(fillFunction);
+			segment.iteratePoints(drawFunction);
 		});
 	},
 

@@ -52,6 +52,9 @@ TTYDevice.prototype.initializeKeyboard = function() {
 		else if(chr === '\u0003') {
 			self.emit('exitPressed');
 		}
+		else if(chr === 'n') {
+			self.emit('newGamePressed');
+		}
 	});
 };
 

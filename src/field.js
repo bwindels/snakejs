@@ -22,7 +22,7 @@ Field.prototype = {
 		return point.x === 0 || point.y === 0 || point.x === this.width - 1 || point.y === this.height - 1;
 	},
 	initialSnakeSegment: function() {
-		var len = 4;
+		var len = 40;
 		var x = Math.floor((this.width / 2) - (len / 2));
 		var y = Math.floor(this.height / 2);
 		var head = new Point(x,y);

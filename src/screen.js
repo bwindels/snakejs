@@ -5,6 +5,9 @@ function Screen(tty) {
 }
 
 Screen.prototype = {
+	clear: function() {
+		this.tty.clearScreen();
+	},
 	_mapPoint: function(p) {
 		//ansi cursor origin is 1,1 (upper left corner)
 		//snake coordinates system origin is 0,0 (upper left corner)
@@ -19,15 +22,20 @@ Screen.prototype = {
 	fillSnakeCell: function(point) {
 		this.tty.writeAtPosition(this._mapPoint(point), '*');
 	},
+	fillDeadSnakeCell: function(point) {
+		this.tty.writeAtPosition(this._mapPoint(point), 'x');
+	},
 	clearCell: function(point) {
 		this.tty.writeAtPosition(this._mapPoint(point), ' ');
 	},
 	drawScore: function(score) {
-		this.tty.writeAtPosition({x: 1, y: 0}, 'Score: ' + score);
+		this.tty.writeAtPosition({x: 3, y: 1}, ' Score: ' + score + ' ');
+	},
+	drawStatus: function(text) {
+		this.tty.writeAtPosition({x: 5, y: this.tty.height()}, text);
 	},
 	drawGameOver: function(score) {
-		this.tty.clearScreen();
-		this.tty.writeAtPosition({x: 0, y: 0}, 'Game over with score ' + score);
+		this.tty.writeAtPosition({x: 6, y: 3}, 'Game over with score ' + score + ', hit n for a new game');
 	},
 	fieldSize: function() {
 		return {

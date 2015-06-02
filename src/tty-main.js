@@ -10,7 +10,6 @@ if(!tty.isInteractive()) {
 }
 
 tty.initializeKeyboard();
-tty.clearScreen();
 
 var screen = new Screen(tty);
 var game = new SnakeGame(screen);
@@ -26,6 +25,10 @@ tty.on('leftPressed', function() {
 
 tty.on('rightPressed', function() {
 	game.turnRight();
+});
+
+tty.on('newGamePressed', function() {
+	game.start();
 });
 
 game.start();
