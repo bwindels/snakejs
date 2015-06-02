@@ -13,7 +13,7 @@ Field.prototype = {
 			callback(new Point(i, 0));
 			callback(new Point(i, this.height - 1));
 		}
-		for(i = 1; i < (this.height - 2); ++i) {
+		for(i = 1; i < (this.height - 1); ++i) {
 			callback(new Point(0, i));
 			callback(new Point(this.width - 1, i));
 		}

@@ -46,7 +46,7 @@ SnakeGame.prototype = {
 		}
 		this.nextMove = 0;
 		this._checkPosition();
-		this.timeoutHandle = setTimeout(this._nextTick.bind(this), 1000);
+		this.timeoutHandle = setTimeout(this._nextTick.bind(this), 100);
 	},
 	_newApple: function() {
 		var apple;
